@@ -1,0 +1,88 @@
+#include<iostream>
+#include<string>
+#include<cstdlib>
+#include<cstdio>
+#include<vector>
+
+using namespace std;
+
+void qs(int *a, int l, int r)
+{
+	if (l < r)
+	{
+		int temp;
+		int low = l;
+		int high = r;
+		int m = a[l];
+		while (low < high)
+		{
+			while (low<high && a[high] < m) 
+				 high--;
+			if (low < high)
+				a[low] = a[high];
+
+			while (low<high && a[low] >= m) 
+				 low++;
+			if (low < high) 
+				a[high] = a[low];
+
+		}
+		a[low] = m;
+		qs(a, low + 1, r);
+		qs(a, l, low - 1);
+		
+	}
+
+}
+
+bool check(const int *a, const long long  ans, const int n)
+{
+	long long  change;
+	change = ans;
+	for (int i = 0; i < n; i++)
+	{
+		if (change > a[i] * 1000)
+			change = change - a[i] * 1000;
+		else
+		{
+			change = change % a[i];
+		}
+		
+		if (change == 0) return true;
+	}
+	return false;
+}
+
+int main()
+{
+	int n;
+	cin >> n;
+	int *t = new int[n];
+	bool lo = false;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> t[i];
+		if (t[i] == 1) lo = true;
+	}
+	long long ans = 1;
+	qs(t,0,n-1);
+	while (lo == true)
+	{
+		if (check(t, ans, n) == false)
+		{
+			cout << ans;
+			break;
+		}
+		ans++;
+	}
+	if (lo == false)
+		cout << 1;
+	/*
+	for (int i = 0; i < n; i++)
+	{
+		cout << t[i] << " ";
+	}
+	*/
+	//while (ans)
+	cin >> n;
+}

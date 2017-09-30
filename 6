@@ -1,0 +1,98 @@
+#include<iostream>
+#include<string>
+#include<cstdlib>
+#include<cstdio>
+#include<vector>
+
+using namespace std;
+
+struct num
+{
+	long long number;
+	num *next;
+};
+
+long long ksm(int a,int l)
+{
+	long long ans = 1;
+	long long base = a;
+	while (l != 0)
+	{
+		if (l & 1 != 0)
+		{
+			ans = ans*base;
+		}
+		base = base*base;
+		l >>= 1;
+	}
+	return ans;
+
+}
+int main()
+{
+	int n;
+	int tot=1;
+	cin >> n;
+	int tl,nn;
+	tl = 1;
+	nn = n;
+	while (nn > 10)
+	{
+		nn = n / 10;
+		tl++;
+	}
+	num *head, *tail, *p, *q;
+	head = new num;
+	head->number = 1;
+	tail = head;
+	p = head;
+	tl = 1;
+	int now;
+	int left = 1;
+	while (1)
+	{
+		now = ksm(2, tl);
+		if ( tail==NULL || tail->number > n )
+		{
+			break;
+		}
+		long long zong = ksm(10, left);
+		p = new num;
+		tail->next = p;
+		p->number = zong;
+		tail = p;
+		q = head;
+		if ( tail->number > n )
+		{
+			tail = NULL;
+			break;
+		}
+		else tot++;
+		for (int i = 0; i < now-1; i++)
+		{
+			p = new num;
+			tail->next = p;
+			p->number = zong + q->number;
+			q = q->next;
+			tail = p;
+			if ( tail->number > n )
+			{
+				tail = NULL;
+				break;
+			}	
+			else tot++;
+		}
+		tl++;
+		left++;
+		
+	}
+	cout << tot<<" "<<"//"<<" ";
+
+	while (head->next != NULL)
+	{
+		cout << head->number << " ";
+		head = head->next;
+	}
+	cout << endl;
+	cin >> n;
+}
